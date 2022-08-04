@@ -50,21 +50,46 @@ class UI {
     }
     else {
       let amount = parseInt(expenseAmount);
-      this.expenseName ="";
-      this.expenseAmount ="";
-      let expense = {
+      this.expenseName.value ="";
+      this.expenseAmount.value ="";
+      const expense = {
         id:this.itemID,
         tittle:expenseName,
         amount:amount,
-      }
+      };
       this.itemID++;
-      this.itemList.push(expense)
-      this.addExpense(expense)
-      //show balance
+      this.itemList.push(expense);
+      this.addExpense()
+      this.showBalance()
     }
 
 
   }
+  addExpense(expense){
+    const div = document.createElement('div');
+    div.classList.add('expense');
+    div.innerHTML =' <div class="expense">\n' +
+        '  <div class="expense-item d-flex justify-content-between align-items-baseline">\n' +
+        '\n' +
+        '  <h6 class="expense-title mb-0 text-uppercase list-item">${expense.title}</h6>\n' +
+        '  <h5 class="expense-amount mb-0 list-item">${expense.amount}</h5>\n' +
+        '\n' +
+        '  <div class="expense-icons list-item">\n' +
+        '\n' +
+        '  <a href="#" class="edit-icon mx-2" data-id="${expense.id}">\n' +
+        '  <i class="fas fa-edit"></i>\n' +
+        '  </a>\n' +
+        '  <a href="#" class="delete-icon" data-id="${expense.id}">\n' +
+        '   <i class="fas fa-trash"></i>\n' +
+        '  </a>\n' +
+        ' </div>\n' +
+        ' </div>\n' +
+        '\n' +
+        ' </div>\n';
+    this.expenseList.appendChild(div);
+
+  }
+
 
   //show balance method
   showBalance(){
@@ -88,17 +113,16 @@ class UI {
     }
   }
 
-//add expense
-  addExpense(expense){
-    const div = document.createElement('div');
-    div.classList.add('expense')
-    div.innerHTML ='';
-    this.expenseList.appendChild(div);
-
-  }
-  //totsl expense method
+  //total expense method
   totalExpense(){
-    let total = 400;
+    let total = 0;
+    if (this.itemList.length > 0){
+     total=this.itemList.reduce(function (acc,curr) {
+       acc+= curr.amount;
+       return acc;
+     },0)
+    }
+    this.expenseAmount.textContent = total;
     return total;
   }
 }
@@ -123,7 +147,7 @@ event.preventDefault()
     ui.submitExpenseForm();
   });
 
-  expenseList.addEventListener('click',function () {
+  expenseList.addEventListener('click',function (event) {
 
   });
 }
